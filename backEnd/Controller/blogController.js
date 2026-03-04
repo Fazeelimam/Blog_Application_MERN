@@ -6,7 +6,7 @@ import main from '../Configs/gemini.js';
 
 export const addBlog = async (req, res) => {
     try {
-        const { title, subTitle, description, category, isPublished } = JSON.parse(req.body.blog);
+        const { title, subTitle, description, category, isPublished } = req.body;
         const imageFile = req.file;
 
         // check if all fields are filled ?
@@ -44,12 +44,12 @@ export const addBlog = async (req, res) => {
 };
 
 
-export const getAllBlogs = async(req,res)=>{
+export const getAllBlogs = async (req, res) => {
     try {
-        const blogs = await Blog.find({isPublished: true});
-        res.json({success: true, blogs})
+        const blogs = await Blog.find({ isPublished: true });
+        res.json({ success: true, blogs })
     } catch (error) {
-        res.json({success: false, message: error.message})
+        res.json({ success: false, message: error.message })
     }
 }
 
@@ -67,15 +67,15 @@ export const getBlogbyID = async (req, res) => {
 };
 
 // Delete
-export const DeleteBlogbyID = async(req,res)=>{
+export const DeleteBlogbyID = async (req, res) => {
     try {
-        const {id} = req.body;
+        const { id } = req.body;
         await Blog.findByIdAndDelete(id);
         // Delete all comments associated with the blog
-        await Comments.deleteMany({blog:id}); 
-        res.json({success: true, message: "Blog delete Successfully"});
+        await Comments.deleteMany({ blog: id });
+        res.json({ success: true, message: "Blog delete Successfully" });
     } catch (error) {
-        res.json({success: false, message: error.message})
+        res.json({ success: false, message: error.message })
     }
 }
 
@@ -99,39 +99,39 @@ export const togglePublish = async (req, res) => {
 
 
 export const addComments = async (req, res) => {
-  try {
-    const { blogId, name, content } = req.body;
+    try {
+        const { blogId, name, content } = req.body;
 
-    // Map blogId → blog
-    await Comments.create({
-      blog: blogId,
-      name,
-      content,
-    });
+        // Map blogId → blog
+        await Comments.create({
+            blog: blogId,
+            name,
+            content,
+        });
 
-    res.json({ success: true, message: "Comment added for review" });
-  } catch (error) {
-    res.json({ success: false, message: error.message });
-  }
+        res.json({ success: true, message: "Comment added for review" });
+    } catch (error) {
+        res.json({ success: false, message: error.message });
+    }
 };
 
 
-export const getBlogComments = async(req,res)=>{
+export const getBlogComments = async (req, res) => {
     try {
-        const {blogId} = req.body;
-        const comments =  await Comments.find({blog: blogId, isApproved: true}).sort({createdAt: -1});
-        res.json({success: true, comments});
+        const { blogId } = req.body;
+        const comments = await Comments.find({ blog: blogId, isApproved: true }).sort({ createdAt: -1 });
+        res.json({ success: true, comments });
     } catch (error) {
-        res.json({success: false, message: error.message});
+        res.json({ success: false, message: error.message });
     }
 }
 
-export const generateContentbyAI = async(req,res)=>{
+export const generateContentbyAI = async (req, res) => {
     try {
-        const {prompt} = req.body;
+        const { prompt } = req.body;
         const content = await main(prompt + 'Generate a blog content for this topic in simple text format')
-        res.json({success: true, content})
+        res.json({ success: true, content })
     } catch (error) {
-        res.json({success: false, message: error.message})
+        res.json({ success: false, message: error.message })
     }
 }
