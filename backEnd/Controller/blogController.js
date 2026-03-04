@@ -6,13 +6,17 @@ import main from '../Configs/gemini.js';
 
 export const addBlog = async (req, res) => {
     try {
-        const { title, subTitle, description, category, isPublished } = JSON.parse(req.body.blog);
+        const { title, subTitle, description, category, isPublished } = req.body;
         const imageFile = req.file;
+
+        const isPublishedBoolean = isPublished === "true";
 
         // check if all fields are filled ?
         if (!title || !subTitle || !description || !category || isPublished === undefined) {
             return res.json({ success: false, message: "All fields are required!" });
         }
+
+        if (!imageFile) return res.json({ success: false, message: "Image is required" })
 
         const fileBuffer = fs.readFileSync(imageFile.path);
 
@@ -35,7 +39,7 @@ export const addBlog = async (req, res) => {
 
         const image = optimizationURL;
 
-        await Blog.create({ title, subTitle, description, image, category, isPublished });
+        await Blog.create({ title, subTitle, description, image, category, isPublished: isPublishedBoolean });
         res.json({ success: true, message: "Blog added successfully" });
 
     } catch (error) {
