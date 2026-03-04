@@ -1,4 +1,4 @@
-import fs from 'fs'
+// import fs from 'fs'
 import imagekit from '../Settings/Imagekit.js'
 import Blog from '../models/Blog.js';
 import Comments from '../models/Comments.js'
@@ -18,7 +18,8 @@ export const addBlog = async (req, res) => {
 
         if (!imageFile) return res.json({ success: false, message: "Image is required" })
 
-        const fileBuffer = fs.readFileSync(imageFile.path);
+        // const fileBuffer = fs.readFileSync(imageFile.path);
+        const fileBuffer = imageFile.buffer;
 
         // Upload image to Imagekit
         const response = await imagekit.upload({
