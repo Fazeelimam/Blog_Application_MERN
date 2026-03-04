@@ -5,19 +5,27 @@ import ConnectDB from './connection/connection.js';
 import adminRouter from './Routes/adminroutes.js';
 import blogRouter from './Routes/BlogRoutes.js';
 
+const PORT = process.env.PORT || 3000;
+
 // Middleware
 const app = express();
 await ConnectDB();
-// app.use(cors());
-app.use(cors());
-app.use(express.json());
 
-const PORT = process.env.PORT || 3000;
+// app.use(cors());
+app.use(cors({
+    origin: [
+        "https://blog-app-mu-self.vercel.app",
+        "http://localhost:3000"
+    ],
+    methods: ["POST", "PUT", "DELETE", "GET"],
+    credentials: true
+}));
+app.use(express.json());
 
 // Routes
 app.get('/', (req, res) => res.send("API is Working"));
-app.use('/api/admin', adminRouter);
-app.use('/api/blog', blogRouter)
+app.use('/admin', adminRouter);
+app.use('/blog', blogRouter)
 
 // Start server (must pass PORT here)
 app.listen(PORT, () => {

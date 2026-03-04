@@ -8,10 +8,32 @@ function Login() {
 
   const { axios, setToken } = useAppContext();
 
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     const { data } = await axios.post("/api/admin/login", {
+  //       email,
+  //       password,
+  //     });
+
+  //     if (data.success) {
+  //       setToken(data.token);
+  //       localStorage.setItem("token", data.token);
+  //       axios.defaults.headers.common["Authorization"] = data.token; // ✅ also fix .common
+  //       toast.success("Login successful");
+  //     } else {
+  //       toast.error(data.message || "Login failed"); // ✅ use backend message
+  //     }
+  //   } catch (error) {
+  //     toast.error(error.response?.data?.message || error.message);
+  //   }
+  // };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await axios.post("/api/admin/login", {
+      const { data } = await axios.post("/admin/login", {
+        // ✅ Removed /api
         email,
         password,
       });
@@ -19,10 +41,10 @@ function Login() {
       if (data.success) {
         setToken(data.token);
         localStorage.setItem("token", data.token);
-        axios.defaults.headers.common["Authorization"] = data.token; // ✅ also fix .common
+        axios.defaults.headers.common["Authorization"] = data.token;
         toast.success("Login successful");
       } else {
-        toast.error(data.message || "Login failed"); // ✅ use backend message
+        toast.error(data.message || "Login failed");
       }
     } catch (error) {
       toast.error(error.response?.data?.message || error.message);
