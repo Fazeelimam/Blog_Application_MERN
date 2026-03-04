@@ -10,7 +10,7 @@ export const addBlog = async (req, res) => {
         const imageFile = req.file;
 
         // check if all fields are filled ?
-        if (!title || !subTitle || !description || !category || isPublished === undefined) {
+        if (!title || !subTitle || !description || !imageFile || !category || isPublished === undefined) {
             return res.json({ success: false, message: "All fields are required!" });
         }
 
