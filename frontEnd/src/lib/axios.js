@@ -5,9 +5,6 @@ const API_URL = import.meta.env.VITE_BASE_URL || "http://localhost:3000"; // ✅
 export const axiosInstance = axios.create({
     baseURL: API_URL, // ✅ Removed /api since backend doesn't have it
     withCredentials: true,
-    headers: {
-        "Content-Type": "application/json" // ✅ Fixed typo
-    }
 });
 
 axiosInstance.interceptors.response.use(
