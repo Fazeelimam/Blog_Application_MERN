@@ -1,4 +1,4 @@
-// import fs from 'fs'
+import fs from 'fs'
 import imagekit from '../Settings/Imagekit.js'
 import Blog from '../models/Blog.js';
 import Comments from '../models/Comments.js'
@@ -6,20 +6,15 @@ import main from '../Configs/gemini.js';
 
 export const addBlog = async (req, res) => {
     try {
-        const { title, subTitle, description, category, isPublished } = req.body;
+        const { title, subTitle, description, category, isPublished } = JSON.parse(req.body.blog);
         const imageFile = req.file;
-
-        const isPublishedBoolean = isPublished === "true";
 
         // check if all fields are filled ?
         if (!title || !subTitle || !description || !category || isPublished === undefined) {
             return res.json({ success: false, message: "All fields are required!" });
         }
 
-        if (!imageFile) return res.json({ success: false, message: "Image is required" })
-
-        // const fileBuffer = fs.readFileSync(imageFile.path);
-        const fileBuffer = imageFile.buffer;
+        const fileBuffer = fs.readFileSync(imageFile.path);
 
         // Upload image to Imagekit
         const response = await imagekit.upload({
@@ -40,11 +35,10 @@ export const addBlog = async (req, res) => {
 
         const image = optimizationURL;
 
-        await Blog.create({ title, subTitle, description, image, category, isPublished: isPublishedBoolean });
+        await Blog.create({ title, subTitle, description, image, category, isPublished });
         res.json({ success: true, message: "Blog added successfully" });
 
     } catch (error) {
-        console.log('❌ Add Blog Error:', error)
         res.json({ success: false, message: error.message });
     }
 };
