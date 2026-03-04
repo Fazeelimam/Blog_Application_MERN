@@ -17,13 +17,15 @@ app.use(cors({
         "https://blog-app-mu-self.vercel.app",
         "http://localhost:3000"
     ],
-    methods: ["POST", "PUT", "DELETE", "GET"],
+    methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true
 }));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }))
 
 // Routes
-app.get('/', (req, res) => res.send("API is Working"));
+app.get('/', (req, res) => res.send("API is Working 🎉"));
+
 app.use('/admin', adminRouter);
 app.use('/blog', blogRouter)
 

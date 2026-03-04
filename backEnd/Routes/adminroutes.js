@@ -4,8 +4,8 @@ import auth from '../Middleware/auth.js';
 
 const adminRouter = express.Router();
 
-adminRouter.post("/login",adminController);
-adminRouter.get("/comments",getAllComments);
+adminRouter.post("/login", adminController);
+adminRouter.get("/comments", getAllComments);
 adminRouter.get("/blogs", auth, getAllBlogsAdmin);
 adminRouter.post("/delete-comment", auth, deleteCommentsbyID);
 adminRouter.post("/approve-comment", auth, approveCommentByID);
