@@ -1,4 +1,4 @@
-import express from 'express'
+import express from "express"
 import { addBlog, addComments, DeleteBlogbyID, generateContentbyAI, getAllBlogs, getBlogbyID, getBlogComments, togglePublish } from '../Controller/blogController.js';
 import upload from '../Middleware/multer.js';
 import auth from '../Middleware/auth.js';
