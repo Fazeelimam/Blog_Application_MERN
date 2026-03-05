@@ -3,7 +3,6 @@
 // export default upload;
 
 import formidable from 'formidable';
-import fs from 'fs';
 
 export const parseFormData = (req, res, next) => {
     const form = formidable({
