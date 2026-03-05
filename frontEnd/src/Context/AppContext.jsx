@@ -51,7 +51,7 @@
 // };
 
 import { createContext, useContext, useEffect, useState } from "react";
-import { axiosInstance } from "./lib/axios.js"; // ✅ Import your configured instance
+import { axiosInstance } from "../lib/axios.js";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
