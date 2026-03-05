@@ -1,16 +1,16 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
-import Home from "./Pages/Home";
-import Blog from "./Pages/Blog";
-import Layout from "./Pages/Admin/Layout";
+import Home from "./Pages/Home.jsx";
+import Blog from "./Pages/Blog.jsx";
+import Layout from "./Pages/Admin/Layout.jsx";
 import Dashboard from "./Pages/Admin/Dashboard";
-import AddBlog from "./Pages/Admin/AddBlog";
-import ListBlog from "./Pages/Admin/ListBlog";
-import Comments from "./Pages/Admin/Comments";
-import Login from "./Components/Admin/Login";
+import AddBlog from "./Pages/Admin/AddBlog.jsx";
+import ListBlog from "./Pages/Admin/ListBlog.jsx";
+import Comments from "./Pages/Admin/Comments.jsx";
+import Login from "./Components/Admin/Login.jsx";
 import "quill/dist/quill.snow.css";
 import { Toaster } from "react-hot-toast";
-import { useAppContext } from "./Context/AppContext";
+import { useAppContext } from "./Context/AppContext.jsx";
 
 function App() {
   const { token } = useAppContext();
