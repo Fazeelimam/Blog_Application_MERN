@@ -1,6 +1,7 @@
 import express from 'express'
 import 'dotenv/config'
 import cors from 'cors'
+import fileUpload from 'express-fileupload';
 import ConnectDB from './connection/connection.js';
 import adminRouter from './Routes/adminroutes.js';
 import blogRouter from './Routes/BlogRoutes.js';
@@ -23,6 +24,13 @@ app.use(cors({
 }));
 app.use(express.json({ limit: '10mb ' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }))
+
+// ✅ Add file upload middleware GLOBALLY
+app.use(fileUpload({
+    useTempFiles: true,
+    tempFileDir: '/tmp/',
+    limits: { fileSize: 10 * 1024 * 1024 }
+}))
 
 // Routes
 app.get('/', (req, res) => res.send("API is Working 🎉"));

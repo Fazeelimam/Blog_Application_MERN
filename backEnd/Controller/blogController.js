@@ -1,68 +1,60 @@
+import fs from 'fs'
 import imagekit from '../Settings/Imagekit.js'
 import Blog from '../models/Blog.js';
 import Comments from '../models/Comments.js'
 import main from '../Configs/gemini.js';
 
 export const addBlog = async (req, res) => {
-    // try {
+    try {
 
-    //     if (!req.body || Object.keys(req.body).length === 0) {
-    //         return res.json({
-    //             success: false,
-    //             message: "DEBUG: req.body is empty or undefined",
-    //             hasFile: !!req.file,
-    //             bodyKeys: req.body ? Object.keys(req.body) : 'undefined'
-    //         });
-    //     }
-    //     // const { title, subTitle, description, category, isPublished } = JSON.parse(req.body.blog);
-    //     const { title, subTitle, description, category, isPublished } = req.body;
-    //     const imageFile = req.file;
+        if (!req.body || Object.keys(req.body).length === 0) {
+            return res.json({
+                success: false,
+                message: "DEBUG: req.body is empty or undefined",
+                hasFile: !!req.file,
+                bodyKeys: req.body ? Object.keys(req.body) : 'undefined'
+            });
+        }
+        // const { title, subTitle, description, category, isPublished } = JSON.parse(req.body.blog);
+        const { title, subTitle, description, category, isPublished } = req.body;
+        const imageFile = req.files?.image;
 
-    //     // check if all fields are filled ?
-    //     if (!title || !subTitle || !description || !imageFile || !category || isPublished === undefined) {
-    //         return res.json({ success: false, message: "All fields are required!" });
-    //     }
+        // check if all fields are filled ?
+        if (!title || !subTitle || !description || !category || isPublished === undefined) {
+            return res.json({ success: false, message: "All fields are required!" });
+        }
 
-    //     const fileBuffer = imageFile.buffer;
+        if (!imageFile) {
+            return res.json({ success: false, message: "Image is required! " })
+        }
 
-    //     // Upload image to Imagekit
-    //     const response = await imagekit.upload({
-    //         file: fileBuffer,
-    //         fileName: imageFile.originalname,
-    //         folder: "/blogs"
-    //     });
+        const fileBuffer = fs.readFileSync(imageFile.tempFilePath);
 
-    //     // Optimization through Imagekit URL transformation
-    //     const optimizationURL = imagekit.url({
-    //         path: response.filePath,
-    //         transformation: [
-    //             { quality: 'auto' }, // auto compression
-    //             { format: 'webp' }, // convert to modern format
-    //             { width: '1280' } // width resizing
-    //         ]
-    //     });
+        // Upload image to Imagekit
+        const response = await imagekit.upload({
+            file: fileBuffer,
+            fileName: imageFile.name,
+            folder: "/blogs"
+        });
 
-    //     const image = optimizationURL;
+        // Optimization through Imagekit URL transformation
+        const optimizationURL = imagekit.url({
+            path: response.filePath,
+            transformation: [
+                { quality: 'auto' }, // auto compression
+                { format: 'webp' }, // convert to modern format
+                { width: '1280' } // width resizing
+            ]
+        });
 
-    //     await Blog.create({ title, subTitle, description, image, category, isPublished });
-    //     res.json({ success: true, message: "Blog added successfully" });
+        const image = optimizationURL;
 
-    // } catch (error) {
-    //     res.json({ success: false, message: error.message });
-    // }
-    // ✅ Enhanced debug - see EVERYTHING
-    return res.json({
-        success: false,
-        message: "DEBUG INFO",
-        hasBody: !!req.body,
-        bodyType: typeof req.body,
-        bodyKeys: req.body ? Object.keys(req.body) : 'undefined',
-        hasFile: !!req.file,
-        contentType: req.headers['content-type'],
-        hasAuth: !!req.headers['authorization'],
-        method: req.method,
-        url: req.url
-    });
+        await Blog.create({ title, subTitle, description, image, category, isPublished });
+        res.json({ success: true, message: "Blog added successfully" });
+
+    } catch (error) {
+        res.json({ success: false, message: error.message });
+    }
 };
 
 
