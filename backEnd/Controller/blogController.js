@@ -4,82 +4,65 @@ import Blog from '../models/Blog.js';
 import Comments from '../models/Comments.js'
 import main from '../Configs/gemini.js';
 
-// export const addBlog = async (req, res) => {
-//     try {
-//         console.log('🔍 DEBUG:', {
-//             hasBody: !!req.body,
-//             bodyKeys: req.body ? Object.keys(req.body) : 'undefined',
-//             body: req.body,
-//             hasFiles: !!req.files,
-//             fileKeys: req.files ? Object.keys(req.files) : 'undefined',
-//             files: req.files
-//         });
-//         const { title, subTitle, description, category, isPublished } = req.body;
-//         const imageFile = req.files?.image;  // ✅ Using req.files now
-
-//         // Check if all fields are filled
-//         if (!title || !subTitle || !description || !category || isPublished === undefined) {
-//             return res.json({ success: false, message: "All fields are required!" });
-//         }
-
-//         if (!imageFile) {
-//             return res.json({ success: false, message: "Image is required!" });
-//         }
-
-//         // Read file from temp path
-//         const fileBuffer = fs.readFileSync(imageFile.tempFilePath);
-
-//         // Upload image to Imagekit
-//         const response = await imagekit.upload({
-//             file: fileBuffer,
-//             fileName: imageFile.name,
-//             folder: "/blogs"
-//         });
-
-//         // Optimization through Imagekit URL transformation
-//         const optimizationURL = imagekit.url({
-//             path: response.filePath,
-//             transformation: [
-//                 { quality: 'auto' },
-//                 { format: 'webp' },
-//                 { width: '1280' }
-//             ]
-//         });
-
-//         const image = optimizationURL;
-
-//         // Convert string to boolean
-//         const isPublishedBool = isPublished === 'true' || isPublished === true;
-
-//         await Blog.create({
-//             title,
-//             subTitle,
-//             description,
-//             image,
-//             category,
-//             isPublished: isPublishedBool
-//         });
-
-//         res.json({ success: true, message: "Blog added successfully" });
-
-//     } catch (error) {
-//         console.error('Error:', error);
-//         res.json({ success: false, message: error.message });
-//     }
-// };
 export const addBlog = async (req, res) => {
-    // ✅ RETURN debug info to see what's received
-    return res.json({
-        DEBUG: true,
-        hasBody: !!req.body,
-        bodyType: typeof req.body,
-        bodyKeys: req.body ? Object.keys(req.body) : 'undefined',
-        bodyContent: req.body,
-        hasFiles: !!req.files,
-        filesKeys: req.files ? Object.keys(req.files) : 'undefined',
-        filesContent: req.files
-    });
+    try {
+        const { title, subTitle, description, category, isPublished } = req.body;
+        const imageFile = req.files?.image;  // ✅ Using req.files now
+
+        console.log('📦 Body:', req.body);
+        console.log('📎 Files:', req.files);
+
+        // Check if all fields are filled
+        if (!title || !subTitle || !description || !category || isPublished === undefined) {
+            return res.json({ success: false, message: "All fields are required!" });
+        }
+
+        if (!imageFile) {
+            return res.json({ success: false, message: "Image is required!" });
+        }
+
+        // Read file from temp path
+        const fileBuffer = fs.readFileSync(imageFile.tempFilePath);
+
+        // Upload image to Imagekit
+        const response = await imagekit.upload({
+            file: fileBuffer,
+            fileName: imageFile.name,
+            folder: "/blogs"
+        });
+
+        // Optimization through Imagekit URL transformation
+        const optimizationURL = imagekit.url({
+            path: response.filePath,
+            transformation: [
+                { quality: 'auto' },
+                { format: 'webp' },
+                { width: '1280' }
+            ]
+        });
+
+        const image = optimizationURL;
+
+        // Convert string to boolean
+        const isPublishedBool = isPublished === 'true' || isPublished === true;
+
+        await Blog.create({
+            title,
+            subTitle,
+            description,
+            image,
+            category,
+            isPublished: isPublishedBool
+        });
+
+        res.json({ success: true, message: "Blog added successfully" });
+
+    } catch (error) {
+        console.error('Error:', error);
+        res.json({ success: false, message: error.message });
+    }
 };
+
 
 export const getAllBlogs = async (req, res) => {
     try {
