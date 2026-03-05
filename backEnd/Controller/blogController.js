@@ -6,6 +6,14 @@ import main from '../Configs/gemini.js';
 
 export const addBlog = async (req, res) => {
     try {
+        console.log('🔍 DEBUG:', {
+            hasBody: !!req.body,
+            bodyKeys: req.body ? Object.keys(req.body) : 'undefined',
+            body: req.body,
+            hasFiles: !!req.files,
+            fileKeys: req.files ? Object.keys(req.files) : 'undefined',
+            files: req.files
+        });
         const { title, subTitle, description, category, isPublished } = req.body;
         const imageFile = req.files?.image;  // ✅ Using req.files now
 
