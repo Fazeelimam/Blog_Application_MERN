@@ -6,7 +6,12 @@ import main from '../Configs/gemini.js';
 
 export const addBlog = async (req, res) => {
     try {
-        const { title, subTitle, description, category, isPublished } = JSON.parse(req.body.blog);
+
+        console.log('🔍 req.body:', req.body);  // ← Add this
+        console.log('🔍 req.file:', req.file);  // ← Add this
+
+        // const { title, subTitle, description, category, isPublished } = JSON.parse(req.body.blog);
+        const { title, subTitle, description, category, isPublished } = req.body;
         const imageFile = req.file;
 
         // check if all fields are filled ?
