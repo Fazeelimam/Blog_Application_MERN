@@ -4,16 +4,9 @@
 
 import multer from "multer";
 
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, '/tmp');  // Vercel serverless uses /tmp for temporary files
-    },
-    filename: function (req, file, cb) {
-        const uniqueName = Date.now() + '-' + file.originalname;
-        cb(null, uniqueName);
-    }
+const upload = multer({
+    storage: multer.memoryStorage(),
+    limits: { fileSize: 10 * 1024 * 1024 }  // 10MB limit
 });
-
-const upload = multer({ storage: storage });
 
 export default upload;

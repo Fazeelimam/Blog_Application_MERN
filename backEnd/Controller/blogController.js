@@ -1,4 +1,3 @@
-import fs from 'fs'
 import imagekit from '../Settings/Imagekit.js'
 import Blog from '../models/Blog.js';
 import Comments from '../models/Comments.js'
@@ -6,9 +5,6 @@ import main from '../Configs/gemini.js';
 
 export const addBlog = async (req, res) => {
     try {
-
-        console.log('🔍 req.body:', req.body);  // ← Add this
-        console.log('🔍 req.file:', req.file);  // ← Add this
 
         // const { title, subTitle, description, category, isPublished } = JSON.parse(req.body.blog);
         const { title, subTitle, description, category, isPublished } = req.body;
@@ -19,7 +15,7 @@ export const addBlog = async (req, res) => {
             return res.json({ success: false, message: "All fields are required!" });
         }
 
-        const fileBuffer = fs.readFileSync(imageFile.path);
+        const fileBuffer = imageFile.buffer;
 
         // Upload image to Imagekit
         const response = await imagekit.upload({
