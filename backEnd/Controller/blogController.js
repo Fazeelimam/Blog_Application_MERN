@@ -6,6 +6,14 @@ import main from '../Configs/gemini.js';
 export const addBlog = async (req, res) => {
     try {
 
+        if (!req.body || Object.keys(req.body).length === 0) {
+            return res.json({
+                success: false,
+                message: "DEBUG: req.body is empty or undefined",
+                hasFile: !!req.file,
+                bodyKeys: req.body ? Object.keys(req.body) : 'undefined'
+            });
+        }
         // const { title, subTitle, description, category, isPublished } = JSON.parse(req.body.blog);
         const { title, subTitle, description, category, isPublished } = req.body;
         const imageFile = req.file;
