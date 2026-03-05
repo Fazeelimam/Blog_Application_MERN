@@ -4,52 +4,65 @@ import Comments from '../models/Comments.js'
 import main from '../Configs/gemini.js';
 
 export const addBlog = async (req, res) => {
-    try {
+    // try {
 
-        if (!req.body || Object.keys(req.body).length === 0) {
-            return res.json({
-                success: false,
-                message: "DEBUG: req.body is empty or undefined",
-                hasFile: !!req.file,
-                bodyKeys: req.body ? Object.keys(req.body) : 'undefined'
-            });
-        }
-        // const { title, subTitle, description, category, isPublished } = JSON.parse(req.body.blog);
-        const { title, subTitle, description, category, isPublished } = req.body;
-        const imageFile = req.file;
+    //     if (!req.body || Object.keys(req.body).length === 0) {
+    //         return res.json({
+    //             success: false,
+    //             message: "DEBUG: req.body is empty or undefined",
+    //             hasFile: !!req.file,
+    //             bodyKeys: req.body ? Object.keys(req.body) : 'undefined'
+    //         });
+    //     }
+    //     // const { title, subTitle, description, category, isPublished } = JSON.parse(req.body.blog);
+    //     const { title, subTitle, description, category, isPublished } = req.body;
+    //     const imageFile = req.file;
 
-        // check if all fields are filled ?
-        if (!title || !subTitle || !description || !imageFile || !category || isPublished === undefined) {
-            return res.json({ success: false, message: "All fields are required!" });
-        }
+    //     // check if all fields are filled ?
+    //     if (!title || !subTitle || !description || !imageFile || !category || isPublished === undefined) {
+    //         return res.json({ success: false, message: "All fields are required!" });
+    //     }
 
-        const fileBuffer = imageFile.buffer;
+    //     const fileBuffer = imageFile.buffer;
 
-        // Upload image to Imagekit
-        const response = await imagekit.upload({
-            file: fileBuffer,
-            fileName: imageFile.originalname,
-            folder: "/blogs"
-        });
+    //     // Upload image to Imagekit
+    //     const response = await imagekit.upload({
+    //         file: fileBuffer,
+    //         fileName: imageFile.originalname,
+    //         folder: "/blogs"
+    //     });
 
-        // Optimization through Imagekit URL transformation
-        const optimizationURL = imagekit.url({
-            path: response.filePath,
-            transformation: [
-                { quality: 'auto' }, // auto compression
-                { format: 'webp' }, // convert to modern format
-                { width: '1280' } // width resizing
-            ]
-        });
+    //     // Optimization through Imagekit URL transformation
+    //     const optimizationURL = imagekit.url({
+    //         path: response.filePath,
+    //         transformation: [
+    //             { quality: 'auto' }, // auto compression
+    //             { format: 'webp' }, // convert to modern format
+    //             { width: '1280' } // width resizing
+    //         ]
+    //     });
 
-        const image = optimizationURL;
+    //     const image = optimizationURL;
 
-        await Blog.create({ title, subTitle, description, image, category, isPublished });
-        res.json({ success: true, message: "Blog added successfully" });
+    //     await Blog.create({ title, subTitle, description, image, category, isPublished });
+    //     res.json({ success: true, message: "Blog added successfully" });
 
-    } catch (error) {
-        res.json({ success: false, message: error.message });
-    }
+    // } catch (error) {
+    //     res.json({ success: false, message: error.message });
+    // }
+    // ✅ Enhanced debug - see EVERYTHING
+    return res.json({
+        success: false,
+        message: "DEBUG INFO",
+        hasBody: !!req.body,
+        bodyType: typeof req.body,
+        bodyKeys: req.body ? Object.keys(req.body) : 'undefined',
+        hasFile: !!req.file,
+        contentType: req.headers['content-type'],
+        hasAuth: !!req.headers['authorization'],
+        method: req.method,
+        url: req.url
+    });
 };
 
 
